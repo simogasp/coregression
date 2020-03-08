@@ -21,6 +21,11 @@ def sigmoid(p: np.array, x: np.array) -> np.array:
     return y
 
 
+def sigmoid_get_flex(p: np.array) -> tuple:
+    flex_x = p[0]
+    return flex_x, sigmoid(p, flex_x)
+
+
 def residuals(p, x, y):
     """
 
