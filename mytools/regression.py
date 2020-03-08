@@ -150,12 +150,18 @@ if __name__ == "__main__":
 
     model, xp, pxp = fit_sigmoid(x_orig, y_orig, verbose=True)
 
+    flex = sigmoid_get_flex(model)
+
     # Plot the results
-    plt.plot(x_orig, y_orig, '.', xp, pxp, '-')
+    plt.plot(x_orig, y_orig, '.', label='Intensive care cases')
+    plt.plot(xp, pxp, '-', label='fitting sigmoid')
+    plt.plot(flex[0], flex[1], '.', label='Inflection point ('+day_of_year_to_date(flex[0]).strftime("%d %b")+' '+'{:.2f}'.format(flex[1])+' cases)')
     locs, labels = plt.xticks()
-    a = list((datetime.datetime(2020, 1, 1) + datetime.timedelta(days=int(v))).strftime("%d %b") for v in locs.tolist())
+    a = list((day_of_year_to_date(v)).strftime("%d %b") for v in locs.tolist())
     plt.xticks(ticks=locs.tolist(), labels=a)
-    plt.xlabel('x')
-    plt.ylabel('y', rotation='horizontal')
+
+    plt.ylabel('cases', rotation='horizontal')
     plt.grid(True)
+    plt.title('Italy - Intensive care patients')
+    plt.legend()
     plt.show()
