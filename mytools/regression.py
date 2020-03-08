@@ -55,7 +55,8 @@ def normalize(arr: np.array, lower: float = 0.0, upper: float = 1.0) -> tuple:
     """
 
     arr = arr.copy()
-    if lower > upper: lower, upper = upper, lower
+    if lower > upper:
+        lower, upper = upper, lower
 
     alpha = (upper - lower) / (arr.max() - arr.min())
     t = np.array([alpha, lower - arr.min() * alpha], dtype='float')
