@@ -2,6 +2,12 @@ import numpy as np
 import scipy.optimize
 
 
+def day_of_year_to_date(day, year=None):
+    if year is None:
+        year = datetime.datetime.now().year
+    return datetime.datetime(int(year), 1, 1) + datetime.timedelta(days=int(day))
+
+
 def sigmoid(p: np.array, x: np.array) -> np.array:
     """
     Evaluate a sigmoid
