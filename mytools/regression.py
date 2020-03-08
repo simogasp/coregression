@@ -1,7 +1,4 @@
-import datetime
-
 import numpy as np
-import matplotlib.pyplot as plt
 import scipy.optimize
 
 
@@ -128,6 +125,9 @@ def fit_sigmoid(x, y, verbose: bool = False, lower=-0.5, upper=2.5) -> tuple:
 
 
 if __name__ == "__main__":
+    import datetime
+    import matplotlib.pyplot as plt
+
     # raw data
     # x = np.array([821,576,473,377,326],dtype='float')
     # y = np.array([255,235,208,166,157],dtype='float')
