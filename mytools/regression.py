@@ -81,6 +81,52 @@ def normalize_back(arr: np.array, t: np.array) -> np.array:
     return (arr - t[1]) / t[0]
 
 
+def fit_sigmoid(x, y, verbose: bool = False, lower=-0.5, upper=2.5) -> tuple:
+    x_norm, t_x = normalize(x, lower=0.3)
+    y_norm, t_y = normalize(y, lower=0.3)
+
+    p_guess = np.array([np.median(x_norm), np.median(y_norm), 1.0, 1.0], dtype=float)
+    p, cov, infodict, mesg, ier = scipy.optimize.leastsq(residuals, p_guess, args=(x_norm, y_norm), full_output=True)
+
+    x0, y0, c, k = p
+
+    x0r = (x0 - t_x[1]) / t_x[0]
+    y0r = (y0 - t_y[1]) / t_y[0]
+    cr = c / t_y[0]
+    kr = k * t_x[0]
+
+    model = (x0r, y0r, cr, kr)
+
+    if verbose:
+        print('''\
+            Normalized model
+            x0 = {x0}
+            y0 = {y0}
+            c = {c}
+            k = {k}
+            asymptot = {tinf}
+            flex = {flex},{fley}
+            '''.format(x0=x0, y0=y0, c=c, k=k, flex=x0, fley=sigmoid(p, x0), tinf=c + y0))
+
+        print('''\
+            Sigmoid model
+            x0 = {x0}
+            y0 = {y0}
+            c = {c}
+            k = {k}
+            asymptot = {tinf}
+            flex = {flex},{fley}
+            '''.format(x0=x0r, y0=y0r, c=cr, k=kr, flex=x0r, fley=sigmoid(model, x0r), tinf=cr + y0r))
+
+    xp = np.linspace(lower, upper, 1500)
+    pxp = sigmoid(p, xp)
+
+    xp = normalize_back(xp, t_x)
+    pxp = normalize_back(pxp, t_y)
+
+    return model, xp, pxp
+
+
 if __name__ == "__main__":
     # raw data
     # x = np.array([821,576,473,377,326],dtype='float')
