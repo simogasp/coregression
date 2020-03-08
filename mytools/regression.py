@@ -129,65 +129,17 @@ if __name__ == "__main__":
     import datetime
     import matplotlib.pyplot as plt
 
-    # raw data
-    # x = np.array([821,576,473,377,326],dtype='float')
-    # y = np.array([255,235,208,166,157],dtype='float')
+    data = np.genfromtxt(fname='../italy-intensive_care.csv', delimiter=',', names=True)
 
-    day_start = 55
-    day_stop = 66
+    x_orig = data['day']
+    y_orig = data['intensive_care']
 
-    x_orig = np.arange(start=day_start, stop=day_stop, step=1, dtype=float)
-    y_orig = np.array([27, 35, 35, 56, 64, 105, 140, 166, 229, 295, 351], dtype='float')
     print(x_orig)
     print(y_orig)
 
-    x, t_x = normalize(x_orig, lower=0.3)
-    y, t_y = normalize(y_orig, lower=0.3)
-
-    print(x)
-    print(y)
-
-    p_guess = np.array([np.median(x), np.median(y), 1.0, 1.0], dtype=float)
-    p, cov, infodict, mesg, ier = scipy.optimize.leastsq(residuals, p_guess, args=(x, y), full_output=True)
-
-    x0, y0, c, k = p
-    print('''\
-    x0 = {x0}
-    y0 = {y0}
-    c = {c}
-    k = {k}
-    '''.format(x0=x0, y0=y0, c=c, k=k))
-
-    # xp = np.linspace(day_start-5, day_stop+200, 1500)
-    xp = np.linspace(0, 2.5, 1500)
-    pxp = sigmoid(p, xp)
-
-    # xp = resize_back(xp, x_orig, lower=0.3)
-    xp = normalize_back(xp, t_x)
-    # print(xp)
-    # pxp = resize_back(pxp, y_orig, lower=0.3)
-    pxp = normalize_back(pxp, t_y)
-    # print(pxp)
-
-    # print(resize_back(x, x_orig, lower=0.3))
-    # print(resize_back(y, y_orig, lower=0.3))
-
-    x0r = (x0 - t_x[1] / t_x[0])
-    y0r = (y0 - t_y[1]) / t_y[0]
-    cr = c / t_y[0]
-    kr = k * t_x[0]
-
-    print('''\
-    x0 = {x0}
-    y0 = {y0}
-    c = {c}
-    k = {k}
-    asymptot = {tinf}
-    flex = {flex},{fley}
-    '''.format(x0=x0r, y0=y0r, c=cr, k=kr, flex=kr * x0r / cr, fley=sigmoid(p, kr * x0r / cr), tinf=cr + y0r))
+    model, xp, pxp = fit_sigmoid(x_orig, y_orig, verbose=True)
 
     # Plot the results
-    # plt.xkcd(scale=1.015)
     plt.plot(x_orig, y_orig, '.', xp, pxp, '-')
     locs, labels = plt.xticks()
     a = list((datetime.datetime(2020, 1, 1) + datetime.timedelta(days=int(v))).strftime("%d %b") for v in locs.tolist())
