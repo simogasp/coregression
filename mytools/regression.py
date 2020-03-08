@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.optimize
+import datetime
 
 
 def day_of_year_to_date(day, year=None):
@@ -137,7 +138,7 @@ def fit_sigmoid(x, y, verbose: bool = False, lower=-0.5, upper=2.5) -> tuple:
 
 
 if __name__ == "__main__":
-    import datetime
+
     import matplotlib.pyplot as plt
 
     data = np.genfromtxt(fname='../italy-intensive_care.csv', delimiter=',', names=True)
