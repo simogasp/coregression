@@ -204,44 +204,19 @@ def sigmoid_dumb_initial_guess(x, y) -> np.array:
 
 
 def fit_sigmoid(x, y, verbose: bool = False, lower=-0.5, upper=2.5) -> tuple:
-    x_norm, t_x = normalize(x, lower=0.3)
-    y_norm, t_y = normalize(y, lower=0.3)
+    model, xp, pxp = fit_model(x, y, sigmoid, sigmoid_residuals, denormalize_sigmoid_params,
+                               sigmoid_dumb_initial_guess, lower=lower, upper=upper, verbose=verbose)
 
-    p_guess = sigmoid_dumb_initial_guess(x_norm, y_norm)
-    # p, cov, infodict, mesg, ier = scipy.optimize.leastsq(residuals, p_guess, args=(x_norm, y_norm), full_output=True)
-    result = scipy.optimize.least_squares(sigmoid_residuals, p_guess, args=(x_norm, y_norm), verbose=1, loss='soft_l1')
-    p = result.x
-
-    model = denormalize_sigmoid_params(p, t_x, t_y)
-
-    if verbose:
-        x0, y0, c, k = p
-        print('''\
-            Normalized model
-            x0 = {x0}
-            y0 = {y0}
-            c = {c}
-            k = {k}
-            asymptot = {tinf}
-            flex = {flex},{fley}
-            '''.format(x0=x0, y0=y0, c=c, k=k, flex=x0, fley=sigmoid(p, x0), tinf=c + y0))
-
-        x0r, y0r, cr, kr = model
-        print('''\
-            Sigmoid model
-            x0 = {x0}
-            y0 = {y0}
-            c = {c}
-            k = {k}
-            asymptot = {tinf}
-            flex = {flex},{fley}
-            '''.format(x0=x0r, y0=y0r, c=cr, k=kr, flex=x0r, fley=sigmoid(model, x0r), tinf=cr + y0r))
-
-    xp = np.linspace(lower, upper, 1500)
-    pxp = sigmoid(p, xp)
-
-    xp = normalize_back(xp, t_x)
-    pxp = normalize_back(pxp, t_y)
+    x0r, y0r, cr, kr = model
+    print('''\
+        Sigmoid model
+        x0 = {x0}
+        y0 = {y0}
+        c = {c}
+        k = {k}
+        asymptot = {tinf}
+        flex = {flex}, {fley}
+        '''.format(x0=x0r, y0=y0r, c=cr, k=kr, flex=x0r, fley=sigmoid(model, x0r), tinf=cr + y0r))
 
     return model, xp, pxp
 
