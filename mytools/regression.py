@@ -1,12 +1,51 @@
 import numpy as np
 import scipy.optimize
 import datetime
+from typing import Union, Iterable as typeIterable
+from collections.abc import Iterable
 
 
-def day_of_year_to_date(day, year=None):
+def list_to_wolfram(l: list) -> str:
+    return '{' + ', '.join('{{{}, {}}}'.format(k[0], k[1]) for k in l) + '}'
+
+
+def create_prediction_table(data: np.array, y_sigmoid: np.array, y_exponential: np.array) -> np.array:
+    num_rows = min((np.size(data, 0), np.size(y_exponential, 0), np.size(y_sigmoid, 0)))
+
+    table = np.array([day_of_year_to_string(data['day'][: num_rows]),
+                      data['intensive_care'][: num_rows].tolist(),
+                      y_exponential[: num_rows].tolist(),
+                      y_sigmoid[: num_rows].tolist()])
+    tmp = table.transpose().copy()
+    print(tmp)
+    table = np.array(tmp, dtype=[('date', '<U20'), ('cases', '<U10'), ('exp', '<U10'), ('sigm', '<U10')])
+    return table
+
+
+def day_of_year_to_date(day: Union[int, float, typeIterable], year=None) -> Union[
+    datetime.datetime, typeIterable[datetime.datetime]]:
     if year is None:
         year = datetime.datetime.now().year
-    return datetime.datetime(int(year), 1, 1) + datetime.timedelta(days=int(day))
+
+    if isinstance(day, Iterable):
+        return list(day_of_year_to_date(d) for d in day)
+    else:
+        return datetime.datetime(int(year), 1, 1) + datetime.timedelta(days=int(day))
+
+
+def date_to_string(date: Union[datetime.datetime, typeIterable[datetime.datetime]], date_format: str = '%d %b'):
+    if isinstance(date, Iterable):
+        return list(date_to_string(d, date_format) for d in date)
+    else:
+        return date.strftime(date_format)
+
+
+def day_of_year_to_string(day: Union[int, float, typeIterable], date_format: str = '%d %b') -> Union[
+    str, typeIterable[str]]:
+    if isinstance(day, Iterable):
+        return list(day_of_year_to_string(d, date_format) for d in day)
+    else:
+        return date_to_string(day_of_year_to_date(day), date_format)
 
 
 def exponential(p: np.array, x: np.array) -> np.array:
