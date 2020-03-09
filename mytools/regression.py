@@ -71,7 +71,7 @@ def denormalize_exponential_params(p, t_x, t_y) -> tuple:
 
 def fit_exponential(x, y, verbose: bool = False, lower=-0.5, upper=2.5) -> tuple:
     model, xp, pxp = fit_model(x, y, exponential, exponential_residuals, denormalize_exponential_params,
-                               exponential_dumb_initial_guess, lower=lower, upper=upper)
+                               exponential_dumb_initial_guess, lower=lower, upper=upper, verbose=verbose)
 
     if verbose:
         x0, y0, k = model
@@ -168,12 +168,12 @@ def normalize_back(arr: np.array, t: np.array) -> np.array:
 
 
 def fit_model(x, y, fun: callable, residual_fun: callable, denormalize_p: callable, guess: callable, lower=-0.5,
-              upper=2.5) -> tuple:
+              upper=2.5, verbose=False) -> tuple:
     x_norm, t_x = normalize(x, lower=0.3)
     y_norm, t_y = normalize(y, lower=0.3)
 
     p_guess = guess(x_norm, y_norm)
-    result = scipy.optimize.least_squares(residual_fun, p_guess, args=(x_norm, y_norm), verbose=1, loss='soft_l1')
+    result = scipy.optimize.least_squares(residual_fun, p_guess, args=(x_norm, y_norm), verbose=verbose, loss='soft_l1')
 
     p = result.x
 
