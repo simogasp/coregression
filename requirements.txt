@@ -1,6 +1,9 @@
 numpy
 matplotlib
 scipy
-
+cufflinks
+plotly
+pandas
+psutil
 
 
