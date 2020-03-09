@@ -16,6 +16,13 @@ if __name__ == "__main__":
 
     exp_model, exp_xp, exp_pxp = reg.fit_exponential(x_orig, y_orig, verbose=True, upper=1.25)
 
+    exp_res = reg.exponential_residuals(p=exp_model, x=x_orig, y=y_orig)
+    print(exp_res)
+    print('std err exp: ' + str(np.std(exp_res)))
+    sigm_res = reg.sigmoid_residuals(p=model, x=x_orig, y=y_orig)
+    print(sigm_res)
+    print('std err sigm: ' + str(np.std(sigm_res)))
+
     flex = reg.sigmoid_get_flex(model)
 
     # Plot the results
