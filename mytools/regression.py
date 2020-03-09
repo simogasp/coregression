@@ -65,7 +65,7 @@ def fit_exponential(x, y, verbose: bool = False, lower=-0.5, upper=2.5) -> tuple
                                exponential_dumb_initial_guess, lower=lower, upper=upper)
 
     if verbose:
-        x0, y0,  k = model
+        x0, y0, k = model
         print('''\
             Exponential model
             x0 = {x0}
@@ -158,7 +158,8 @@ def normalize_back(arr: np.array, t: np.array) -> np.array:
     return (arr - t[1]) / t[0]
 
 
-def fit_model(x, y, fun: callable, residual_fun: callable, denormalize_p: callable, guess: callable, lower=-0.5, upper=2.5) -> tuple:
+def fit_model(x, y, fun: callable, residual_fun: callable, denormalize_p: callable, guess: callable, lower=-0.5,
+              upper=2.5) -> tuple:
     x_norm, t_x = normalize(x, lower=0.3)
     y_norm, t_y = normalize(y, lower=0.3)
 
