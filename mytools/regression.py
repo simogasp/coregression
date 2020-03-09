@@ -3,8 +3,8 @@ import scipy.optimize
 import mytools.date as dt
 
 
-def list_to_wolfram(l: list) -> str:
-    return '{' + ', '.join('{{{}, {}}}'.format(k[0], k[1]) for k in l) + '}'
+def list_to_wolfram(data: list) -> str:
+    return '{' + ', '.join('{{{}, {}}}'.format(k[0], k[1]) for k in data) + '}'
 
 
 def create_prediction_table(data: np.array, y_sigmoid: np.array, y_exponential: np.array) -> np.array:
