@@ -88,7 +88,6 @@ def exponential_dumb_initial_guess(x, y) -> np.array:
 
 
 def denormalize_exponential_params(p, t_x, t_y) -> tuple:
-
     x0, y0, k = p
 
     y0r = (y0 - t_y[1]) / t_y[0]
@@ -99,7 +98,6 @@ def denormalize_exponential_params(p, t_x, t_y) -> tuple:
 
 
 def fit_exponential(x, y, verbose: bool = False, lower=-0.5, upper=2.5) -> tuple:
-
     model, xp, pxp = fit_model(x, y, exponential, exponential_residuals, denormalize_exponential_params,
                                exponential_dumb_initial_guess, lower=lower, upper=upper)
 
@@ -219,7 +217,6 @@ def fit_model(x, y, fun: callable, residual_fun: callable, denormalize_p: callab
 
 
 def denormalize_sigmoid_params(p, t_x, t_y) -> tuple:
-
     x0, y0, c, k = p
 
     x0r = (x0 - t_x[1]) / t_x[0]
@@ -231,7 +228,6 @@ def denormalize_sigmoid_params(p, t_x, t_y) -> tuple:
 
 
 def sigmoid_dumb_initial_guess(x, y) -> np.array:
-
     return np.array([np.median(x), np.median(y), 1.0, 1.0], dtype=float)
 
 
