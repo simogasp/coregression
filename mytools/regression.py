@@ -64,7 +64,7 @@ def denormalize_exponential_params(p, t_x, t_y) -> tuple:
 
     y0r = (y0 - t_y[1]) / t_y[0]
     kr = k * t_x[0]
-    x0r = ((x0 - t_x[1]) / t_x[0]) + (np.log(1 / t_x[0]) / kr)
+    x0r = ((x0 - t_x[1]) / t_x[0]) - (np.log(1 / t_y[0]) / kr)
 
     return x0r, y0r, kr
 
