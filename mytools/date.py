@@ -3,8 +3,17 @@ from typing import Union, Iterable as typeIterable
 from collections.abc import Iterable
 
 
-def day_of_year_to_date(day: Union[int, float, typeIterable], year=None) -> Union[
+def day_of_year_to_date(day: Union[int, float, typeIterable], year: Union[int, float] = None) -> Union[
     datetime.datetime, typeIterable[datetime.datetime]]:
+    """
+    Given the day(s) of the year it returns the corresponding datetime(s)
+    Args:
+        day (int or typeIterable): the day of the year [1 366]
+        year (int or float): the year, if None, the current year is assumed
+
+    Returns:
+        The associated datetime
+    """
     if year is None:
         year = datetime.datetime.now().year
 
