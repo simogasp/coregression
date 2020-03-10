@@ -4,7 +4,7 @@ from collections.abc import Iterable
 
 
 def day_of_year_to_date(day: Union[int, float, typeIterable], year: Union[int, float] = None) -> Union[
-    datetime.datetime, typeIterable[datetime.datetime]]:
+        datetime.datetime, typeIterable[datetime.datetime]]:
     """
     Given the day(s) of the year it returns the corresponding datetime(s)
     Args:
@@ -20,7 +20,7 @@ def day_of_year_to_date(day: Union[int, float, typeIterable], year: Union[int, f
     if isinstance(day, Iterable):
         return list(day_of_year_to_date(d, year) for d in day)
     else:
-        return datetime.datetime(int(year), 1, 1) + datetime.timedelta(days=int(day-1))
+        return datetime.datetime(int(year), 1, 1) + datetime.timedelta(days=int(day - 1))
 
 
 def date_to_string(date: Union[datetime.datetime, typeIterable[datetime.datetime]], date_format: str = '%d %b'):
@@ -40,7 +40,7 @@ def date_to_day_of_year(date: Union[str, list], date_format: str = '%m/%d/%y'):
 
 
 def day_of_year_to_string(day: Union[int, float, typeIterable], date_format: str = '%d %b') -> Union[
-    str, typeIterable[str]]:
+        str, typeIterable[str]]:
     if isinstance(day, Iterable):
         return list(day_of_year_to_string(d, date_format) for d in day)
     else:
