@@ -4,7 +4,7 @@ import mytools.date as dt
 import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
-    data = np.genfromtxt(fname='../italy-intensive_care.csv', delimiter=',', names=True)
+    data = np.genfromtxt(fname='italy-intensive_care.csv', delimiter=',', names=True)
 
     x_orig = data['day']
     y_orig = data['intensive_care']
