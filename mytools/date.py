@@ -9,7 +9,7 @@ def day_of_year_to_date(day: Union[int, float, typeIterable], year=None) -> Unio
         year = datetime.datetime.now().year
 
     if isinstance(day, Iterable):
-        return list(day_of_year_to_date(d) for d in day)
+        return list(day_of_year_to_date(d, year) for d in day)
     else:
         return datetime.datetime(int(year), 1, 1) + datetime.timedelta(days=int(day-1))
 
