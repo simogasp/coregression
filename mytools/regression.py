@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.optimize
 import mytools.date as dt
+from math import sqrt, log
 
 
 def list_to_wolfram(data: list) -> str:
@@ -102,6 +103,39 @@ def sigmoid(p: np.array, x: np.array) -> np.array:
     x0, y0, c, k = p
     y = c / (1 + np.exp(-k * (x - x0))) + y0
     return y
+
+
+def sigmoid_first_derivative(p: np.array, x: np.array) -> np.array:
+    """
+    Evaluate the derivate of the sigmoid
+
+    :math:`f(x) = \\frac{c}{1 + e^{-k(x-x_0)}}+y_0`
+
+    as
+
+    :math:`\\frac{d f(x)}{dx} = f(x)(1 - f(x))`
+
+    Args:
+        p (np.array): the array of parameters of the sigmoid [x0, y0, c, k]
+        x (np.array): an array of values where to evaluate the first derivative
+
+    Returns:
+        y (np.array): the first derivative values at given x
+
+    """
+    x0, y0, c, k = p
+    e = np.exp(-k*(x-x0))
+    return (c*k*e) / ((e + 1)**2)
+
+
+def sigmoid_first_derivative_less_than(p: np.array, alpha: float) -> tuple:
+    x0, y0, c, k = p
+    a = sqrt(c**2 * k**2 - 4*alpha*c*k) / (2*alpha)
+    b = (c*k - 2*alpha) / (2*alpha)
+    z1 = a + b
+    z2 = - (a - b)
+
+    return x0 - log(z1) / k, x0 - log(z2) / k
 
 
 def sigmoid_get_flex(p: np.array) -> tuple:
