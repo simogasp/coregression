@@ -143,6 +143,11 @@ def sigmoid_get_flex(p: np.array) -> tuple:
     return flex_x, sigmoid(p, flex_x)
 
 
+def sigmoid_get_asymptote(p: np.array) -> tuple:
+    x0, y0, c, k = p
+    return y0, c + y0
+
+
 def sigmoid_residuals(p, x, y):
     """
 
