@@ -11,7 +11,7 @@ def day_of_year_to_date(day: Union[int, float, typeIterable], year=None) -> Unio
     if isinstance(day, Iterable):
         return list(day_of_year_to_date(d) for d in day)
     else:
-        return datetime.datetime(int(year), 1, 1) + datetime.timedelta(days=int(day))
+        return datetime.datetime(int(year), 1, 1) + datetime.timedelta(days=int(day-1))
 
 
 def date_to_string(date: Union[datetime.datetime, typeIterable[datetime.datetime]], date_format: str = '%d %b'):
