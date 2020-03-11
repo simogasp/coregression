@@ -25,7 +25,7 @@ def exponential(p: np.array, x: np.array) -> np.array:
     """
     Evaluate an exponential function in the form
 
-    :math:`f(x) = e^{-k(x-x_0)} + y_0`.
+    :math:`f(x) = e^{k(x-x_0)} + y_0`.
 
     Args:
         p (np.array): the array of parameters of the exponential [x0, y0, k]
