@@ -1,10 +1,9 @@
 import mytools.date as dt
 
 
-def plot_comparative_plot(data_frame, title='Comparison of death cases', size=4, yTitle='cases',
-                          mode='lines+markers', asFigure=True):
-    fig = data_frame.iplot(theme="white", title=title, size=size, yTitle=yTitle, mode=mode,
-                           asFigure=asFigure)
+def iplot_comparative_plot(data_frame, title='Comparison of death cases', size=4, yTitle='cases', mode='lines+markers', asFigure=True):
+
+    fig = data_frame.iplot(theme="white", title=title, size=size, yTitle=yTitle, mode=mode,  asFigure=asFigure)
 
     days = data_frame.index
 
