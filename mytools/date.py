@@ -30,12 +30,12 @@ def date_to_string(date: Union[datetime.datetime, typeIterable[datetime.datetime
         return date.strftime(date_format)
 
 
-def date_to_day_of_year(date: Union[str, list], date_format: str = '%m/%d/%y'):
+def date_to_day_of_year(date: Union[datetime.datetime, typeIterable[datetime.datetime]])\
+        -> Union[int, typeIterable[int]]:
     if isinstance(date, list):
-        return list(date_to_day_of_year(d, date_format) for d in date)
+        return list(date_to_day_of_year(d) for d in date)
     else:
-        d = datetime.datetime.strptime(date, date_format)
-        delta = d - datetime.datetime(d.year, 1, 1)
+        delta = date - datetime.datetime(date.year, 1, 1)
         return delta.days + 1
 
 
