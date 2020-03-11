@@ -39,6 +39,15 @@ def date_to_day_of_year(date: Union[datetime.datetime, typeIterable[datetime.dat
         return delta.days + 1
 
 
+def str_to_day_of_year(date: Union[str, list], date_format: str = '%m/%d/%y') -> Union[int, list]:
+    if isinstance(date, list):
+        days = list(str_to_day_of_year(d, date_format) for d in date)
+        return days
+    else:
+        d = datetime.datetime.strptime(date, date_format)
+        return date_to_day_of_year(d)
+
+
 def day_of_year_to_string(day: Union[int, float, typeIterable], date_format: str = '%d %b') -> Union[
         str, typeIterable[str]]:
     if isinstance(day, Iterable):
