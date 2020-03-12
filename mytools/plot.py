@@ -10,8 +10,9 @@ def iplot_comparative_plot(data_frame, title='Comparison of death cases', size=4
     fig.update_layout(
         xaxis=dict(
             tickmode='array',
-            tickvals=days[0::5],
-            ticktext=dt.day_of_year_to_string(days[0::5])
+            tickvals=days,
+            ticktext=dt.day_of_year_to_string(days),
+            tickangle=90
         )
     )
 
