@@ -259,3 +259,74 @@ def fit_sigmoid(x, y, verbose: bool = False, lower=-0.5, upper=2.5) -> tuple:
 
     return model, xp, pxp
 
+
+def logistic_distribution(p: np.array, x: np.array) -> np.array:
+    """
+    Evaluate the derivative of the sigmoid
+
+    :math:`f(x) = \\frac{c}{1 + e^{-k(x-x_0)}}+y_0`
+
+    as
+
+    :math:`\\frac{d f(x)}{dx} = f(x)(1 - f(x))`
+
+    Args:
+        p (np.array): the array of parameters of the sigmoid [x0, y0, c, k]
+        x (np.array): an array of values where to evaluate the first derivative
+
+    Returns:
+        y (np.array): the first derivative values at given x
+
+    """
+    x0, y0, c, k = p
+    e = np.exp(-k * (x - x0))
+    return (c * k * e) / ((e + 1) ** 2) + y0
+
+
+def logistic_distribution_residuals(p, x, y):
+    """
+
+    Args:
+        p ():
+        x ():
+        y ():
+
+    Returns:
+
+    """
+    return y - logistic_distribution(p, x)
+
+
+def fit_logistic_distribution(x, y, verbose: bool = False, lower=-0.5, upper=2.5) -> tuple:
+    model, xp, pxp = fit_model(x, y, logistic_distribution, logistic_distribution_residuals,
+                               denormalize_logistic_distribution_params,
+                               sigmoid_dumb_initial_guess, lower=lower, upper=upper, verbose=verbose)
+
+    x0r, y0r, cr, kr = model
+    print('''\
+        Sigmoid derivative model
+        x0 = {x0}
+        y0 = {y0}
+        c = {c}
+        k = {k}
+        max = {flex}, {fley}
+        '''.format(x0=x0r, y0=y0r, c=cr, k=kr, flex=x0r, fley=sigmoid(model, x0r)))
+
+    return model, xp, pxp
+
+
+def denormalize_logistic_distribution_params(p, t_x, t_y) -> tuple:
+    x0, y0, c, k = p
+
+    x0r = (x0 - t_x[1]) / t_x[0]
+    y0r = (y0 - t_y[1]) / t_y[0]
+    cr = c / (t_y[0] * t_x[0])
+    kr = k * t_x[0]
+
+    return x0r, y0r, cr, kr
+
+
+def logistic_distribution_get_max(p) -> tuple:
+    x0, y0, c, k = p
+
+    return x0, c * k / 4 + y0
