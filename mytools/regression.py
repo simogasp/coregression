@@ -107,7 +107,7 @@ def sigmoid(p: np.array, x: np.array) -> np.array:
 
 def sigmoid_first_derivative(p: np.array, x: np.array) -> np.array:
     """
-    Evaluate the derivate of the sigmoid
+    Evaluate the derivative of the sigmoid
 
     :math:`f(x) = \\frac{c}{1 + e^{-k(x-x_0)}}+y_0`
 
