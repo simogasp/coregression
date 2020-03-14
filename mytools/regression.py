@@ -124,14 +124,14 @@ def sigmoid_first_derivative(p: np.array, x: np.array) -> np.array:
 
     """
     x0, y0, c, k = p
-    e = np.exp(-k*(x-x0))
-    return (c*k*e) / ((e + 1)**2)
+    e = np.exp(-k * (x - x0))
+    return (c * k * e) / ((e + 1) ** 2)
 
 
 def sigmoid_first_derivative_less_than(p: np.array, alpha: float) -> tuple:
     x0, y0, c, k = p
-    a = sqrt(c**2 * k**2 - 4*alpha*c*k) / (2*alpha)
-    b = (c*k - 2*alpha) / (2*alpha)
+    a = sqrt(c ** 2 * k ** 2 - 4 * alpha * c * k) / (2 * alpha)
+    b = (c * k - 2 * alpha) / (2 * alpha)
     z1 = a + b
     z2 = - (a - b)
 
