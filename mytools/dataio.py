@@ -49,3 +49,41 @@ def load_cases(file_name: str, countries: List[str] = None) -> pd.DataFrame:
 
     return cases_countries
 
+
+# ITALY
+
+def italy_get_filename_regions() -> str:
+    return 'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv'
+
+
+def italy_get_filename_provinces() -> str:
+    return 'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province.csv'
+
+
+def italy_load_regions(file_name: str, regions: List[str] = None) -> pd.DataFrame:
+    df_cases = pd.read_csv(file_name)
+
+    data_col = 'data'
+    df_cases[data_col] = dt.str_to_day_of_year(df_cases[data_col].tolist(), '%Y-%m-%d %H:%M:%S')
+
+    if regions is None:
+        return df_cases
+
+    region_col = 'denominazione_regione'
+    return df_cases[df_cases[region_col].isin(regions)]
+
+
+def italy_regions_filter_by_category(data_frame: pd.DataFrame, category: str) -> pd.DataFrame:
+    region_col = 'denominazione_regione'
+    data_col = 'data'
+    day_col = 'day'
+    filtered = pd.DataFrame(data_frame[[data_col, region_col, category]])
+
+    regions = filtered[region_col].unique().tolist()
+
+    data = {day_col: filtered[data_col].unique().tolist()}
+
+    for reg in regions:
+        data[reg] = filtered[filtered[region_col] == reg][category].tolist()
+
+    return pd.DataFrame(data)
