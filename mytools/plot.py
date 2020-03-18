@@ -3,6 +3,7 @@ import mytools.regression as reg
 import pandas as pd
 import plotly.graph_objs as go
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def iplot_add_log_scale_button(fig):
@@ -128,3 +129,59 @@ def iplot_analysis_plot(data_frame, title: str, exp_fitting: bool = True, sigm_f
             d.marker.size = 8
 
     return fig
+
+
+def matplot_analysis_plot(x_orig, y_orig, title: str, category: str, exp_fitting: bool = True, sigm_fitting: bool = True, log_fitting: bool = True, verbose: bool = True):
+
+    if exp_fitting:
+        exp_model, exp_xp, exp_pxp = reg.fit_exponential(x_orig, y_orig, verbose=True, upper=1.25)
+
+        if verbose:
+            exp_res = reg.exponential_residuals(p=exp_model, x=x_orig, y=y_orig)
+            print(exp_res)
+            print('std err exp: ' + str(np.std(exp_res)))
+
+    if sigm_fitting:
+        model, xp, pxp = reg.fit_sigmoid(x_orig, y_orig, verbose=True)
+        sigm_res = reg.sigmoid_residuals(p=model, x=x_orig, y=y_orig)
+        flex = reg.sigmoid_get_flex(model)
+        if verbose:
+            print(sigm_res)
+            print('std err sigm: ' + str(np.std(sigm_res)))
+
+    if log_fitting:
+        der_model, der_xp, der_pxp = reg.fit_logistic_distribution(x_orig, y_orig, verbose=True)
+        peak = reg.logistic_distribution_get_max(der_model)
+        if verbose:
+            der_res = reg.logistic_distribution_residuals(p=der_model, x=x_orig, y=y_orig)
+            print(der_res)
+            print('std err der sigm: ' + str(np.std(der_res)))
+
+
+
+    # Plot the results
+    if sigm_fitting:
+        plt.plot(xp, pxp, '-', label='fitting sigmoid')
+    if exp_fitting:
+        plt.plot(exp_xp, exp_pxp, '-', label='fitting exponential')
+    if log_fitting:
+        plt.plot(der_xp, der_pxp, '-', label='fitting logistic distribution')
+
+    plt.plot(x_orig, y_orig, '.', label=category)
+    if sigm_fitting:
+        plt.plot(flex[0], flex[1], '.',
+                 label='Inflection point (' + dt.day_of_year_to_date(flex[0]).strftime("%d %b") + ' ' + '{:.2f}'.format(
+                     flex[1]) + ' cases)')
+    if log_fitting:
+        plt.plot(peak[0], peak[1], '.', label='peak (' + dt.day_of_year_to_date(peak[0]).strftime("%d %b") + ' ' + '{:.2f}'.format( peak[1]) + ' cases)')
+
+    locs, labels = plt.xticks()
+    a = list((dt.day_of_year_to_date(v)).strftime("%d %b") for v in locs.tolist())
+    plt.xticks(ticks=locs.tolist(), labels=a)
+
+    plt.ylabel('cases', rotation='vertical')
+    plt.grid(True)
+    plt.title(title)
+    plt.legend(loc='upper left')
+    # plt.yscale('log')
+    plt.show()
