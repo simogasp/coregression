@@ -11,12 +11,12 @@ def iplot_add_log_scale_button(fig):
             dict(
                 buttons=list([
                     dict(
-                        args=[{"yaxis.type": "linear"}], #"xaxis.type": "linear"}],
+                        args=[{"yaxis.type": "linear"}],  # "xaxis.type": "linear"}],
                         label="Linear",
                         method="relayout"
                     ),
                     dict(
-                        args=[{"yaxis.type": "log"}], #"xaxis.type": "linear"}],
+                        args=[{"yaxis.type": "log"}],  # "xaxis.type": "linear"}],
                         label="Log",
                         method="relayout"
                     )
