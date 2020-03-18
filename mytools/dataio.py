@@ -10,15 +10,15 @@ def get_filename_confirmed_cases() -> str:
 
 def get_filename_death_cases() -> str:
     return 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data' \
-              '/csse_covid_19_time_series/time_series_19-covid-Deaths.csv'
+           '/csse_covid_19_time_series/time_series_19-covid-Deaths.csv'
 
 
 def get_filename_recovered_cases() -> str:
     return 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data' \
-                 '/csse_covid_19_time_series/time_series_19-covid-Recovered.csv'
+           '/csse_covid_19_time_series/time_series_19-covid-Recovered.csv'
 
 
-def load_cases(file_name: str, countries: List[str]=None) -> pd.DataFrame:
+def load_cases(file_name: str, countries: List[str] = None) -> pd.DataFrame:
     df_cases = pd.read_csv(file_name)
 
     first_date = '1/22/20'
@@ -34,7 +34,8 @@ def load_cases(file_name: str, countries: List[str]=None) -> pd.DataFrame:
         # for some countries multiple items are available if regional data is available.
         # if the region has no regional data the province is empty
         # otherwise it has the name of the region or the name of the country for the country overall stats
-        condition = ((df_cases[province_col].isin(countries) | pd.isna(df_cases[province_col]) ) & df_cases[country_col].isin(countries))
+        condition = ((df_cases[province_col].isin(countries) | pd.isna(df_cases[province_col])) & df_cases[
+            country_col].isin(countries))
         # transpose it so that the countries are the columns
         cases_countries = df_cases[condition].loc[:, first_date:].transpose(copy=True)
         # reset the name of the columns as the countries
