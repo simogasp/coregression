@@ -56,6 +56,7 @@ italy_region_name_field = 'denominazione_regione'
 italy_province_name_field = 'denominazione_provincia'
 italy_date_field = 'data'
 
+
 def italy_get_filename_regions() -> str:
     return 'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv'
 
@@ -67,7 +68,8 @@ def italy_get_filename_provinces() -> str:
 def italy_load(file_name: str, field: str, search_for: List[str] = None) -> pd.DataFrame:
     df_cases = pd.read_csv(file_name)
 
-    dates = dt.str_convert_date(df_cases[italy_date_field].tolist(), format_from=dt.format_ISO8601, format_to=dt.format_ddmmyy)
+    dates = dt.str_convert_date(df_cases[italy_date_field].tolist(), format_from=dt.format_ISO8601,
+                                format_to=dt.format_ddmmyy)
     df_cases.index = dates
 
     if search_for is None:
@@ -84,8 +86,7 @@ def italy_load_regions(file_name: str, regions: List[str] = None) -> pd.DataFram
     return italy_load(file_name, italy_region_name_field, regions)
 
 
-def italy_filter_by_category(data_frame: pd.DataFrame, field:str, category: str) -> pd.DataFrame:
-
+def italy_filter_by_category(data_frame: pd.DataFrame, field: str, category: str) -> pd.DataFrame:
     filtered = pd.DataFrame(data_frame[[field, category]])
 
     regions = filtered[field].unique().tolist()
