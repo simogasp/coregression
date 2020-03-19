@@ -52,6 +52,10 @@ def load_cases(file_name: str, countries: List[str] = None) -> pd.DataFrame:
 
 # ITALY
 
+italy_region_name_field = 'denominazione_regione'
+italy_province_name_field = 'denominazione_provincia'
+italy_date_field = 'data'
+
 def italy_get_filename_regions() -> str:
     return 'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv'
 
@@ -60,30 +64,44 @@ def italy_get_filename_provinces() -> str:
     return 'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province.csv'
 
 
-def italy_load_regions(file_name: str, regions: List[str] = None) -> pd.DataFrame:
+def italy_load(file_name: str, field: str, search_for: List[str] = None) -> pd.DataFrame:
     df_cases = pd.read_csv(file_name)
 
-    data_col = 'data'
-    df_cases[data_col] = dt.str_to_day_of_year(df_cases[data_col].tolist(), '%Y-%m-%d %H:%M:%S')
+    dates = dt.str_convert_date(df_cases[italy_date_field].tolist(), format_from=dt.format_ISO8601, format_to=dt.format_ddmmyy)
+    df_cases.index = dates
 
-    if regions is None:
+    if search_for is None:
         return df_cases
 
-    region_col = 'denominazione_regione'
-    return df_cases[df_cases[region_col].isin(regions)]
+    return df_cases[df_cases[field].isin(search_for)].drop(columns=italy_date_field)
+
+
+def italy_load_provinces(file_name: str, provinces: List[str] = None) -> pd.DataFrame:
+    return italy_load(file_name, italy_province_name_field, provinces)
+
+
+def italy_load_regions(file_name: str, regions: List[str] = None) -> pd.DataFrame:
+    return italy_load(file_name, italy_region_name_field, regions)
+
+
+def italy_filter_by_category(data_frame: pd.DataFrame, field:str, category: str) -> pd.DataFrame:
+
+    filtered = pd.DataFrame(data_frame[[field, category]])
+
+    regions = filtered[field].unique().tolist()
+
+    data = {}
+    days = filtered.index.unique().tolist()
+
+    for reg in regions:
+        data[reg] = filtered[filtered[field] == reg][category].tolist()
+
+    return pd.DataFrame(data, index=days)
 
 
 def italy_regions_filter_by_category(data_frame: pd.DataFrame, category: str) -> pd.DataFrame:
-    region_col = 'denominazione_regione'
-    data_col = 'data'
-    day_col = 'day'
-    filtered = pd.DataFrame(data_frame[[data_col, region_col, category]])
+    return italy_filter_by_category(data_frame, field=italy_region_name_field, category=category)
 
-    regions = filtered[region_col].unique().tolist()
 
-    data = {day_col: filtered[data_col].unique().tolist()}
-
-    for reg in regions:
-        data[reg] = filtered[filtered[region_col] == reg][category].tolist()
-
-    return pd.DataFrame(data)
+def italy_provinces_filter_by_category(data_frame: pd.DataFrame, category: str) -> pd.DataFrame:
+    return italy_filter_by_category(data_frame, field=italy_province_name_field, category=category)
