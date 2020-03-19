@@ -44,8 +44,8 @@ def load_cases(file_name: str, countries: List[str] = None) -> pd.DataFrame:
     cases_countries.columns = countries_columns
 
     # replace the date string as index with the day of the year (useful if later on we need to compute models)
-    days = dt.str_to_day_of_year(cases_countries.index.to_list())
-    cases_countries.index = days
+    dates = dt.str_convert_mdy_to_dmy(cases_countries.index.to_list())
+    cases_countries.index = dates
 
     return cases_countries
 
