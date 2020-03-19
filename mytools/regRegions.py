@@ -15,9 +15,18 @@ if __name__ == "__main__":
     intensive = io.italy_regions_filter_by_category(regions, category)
 
     condition = intensive[region] > 0
-    x_orig = intensive[condition]['day']
+    x_orig = np.array(mpl.get_days(intensive[condition]))
     y_orig = intensive[condition][region]
 
     mpl.matplot_analysis_plot(x_orig, y_orig, title=region+' - '+category, category=category)
+
+    category = 'totale_casi'
+    total_cases = io.italy_regions_filter_by_category(regions, category)
+
+    condition = total_cases[region] > 0
+    x_orig = np.array(mpl.get_days(total_cases[condition]))
+    y_orig = total_cases[condition][region]
+
+    mpl.matplot_analysis_plot(x_orig, y_orig, title=region+' - '+category, category=category, log_fitting=False)
 
 
