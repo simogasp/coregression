@@ -164,37 +164,39 @@ def matplot_analysis_plot(x_orig, y_orig, title: str, category: str, exp_fitting
 
     if exp_fitting:
         exp_model, exp_xp, exp_pxp = reg.fit_exponential(x_orig, y_orig, verbose=True, upper=1.25)
-
+        exp_res = reg.exponential_residuals(p=exp_model, x=x_orig, y=y_orig)
+        exp_stderr = np.std(exp_res)
         if verbose:
-            exp_res = reg.exponential_residuals(p=exp_model, x=x_orig, y=y_orig)
             print(exp_res)
-            print('std err exp: ' + str(np.std(exp_res)))
+            print('std err exp: ' + str(exp_stderr))
 
     if sigm_fitting:
-        model, xp, pxp = reg.fit_sigmoid(x_orig, y_orig, verbose=True)
-        sigm_res = reg.sigmoid_residuals(p=model, x=x_orig, y=y_orig)
-        flex = reg.sigmoid_get_flex(model)
+        sigm_model, xp, pxp = reg.fit_sigmoid(x_orig, y_orig, verbose=True)
+        sigm_res = reg.sigmoid_residuals(p=sigm_model, x=x_orig, y=y_orig)
+        sigm_stderr = np.std(sigm_res)
+        flex = reg.sigmoid_get_flex(sigm_model)
         if verbose:
             print(sigm_res)
-            print('std err sigm: ' + str(np.std(sigm_res)))
+            print('std err sigm: ' + str(sigm_stderr))
 
     if log_fitting:
-        der_model, der_xp, der_pxp = reg.fit_logistic_distribution(x_orig, y_orig, verbose=True)
-        peak = reg.logistic_distribution_get_max(der_model)
+        log_model, der_xp, der_pxp = reg.fit_logistic_distribution(x_orig, y_orig, verbose=True)
+        log_res = reg.logistic_distribution_residuals(p=log_model, x=x_orig, y=y_orig)
+        log_stderr = np.std(log_res)
+        peak = reg.logistic_distribution_get_max(log_model)
         if verbose:
-            der_res = reg.logistic_distribution_residuals(p=der_model, x=x_orig, y=y_orig)
-            print(der_res)
-            print('std err der sigm: ' + str(np.std(der_res)))
+            print(log_res)
+            print('std err der sigm: ' + str(log_stderr))
 
 
 
     # Plot the results
     if sigm_fitting:
-        plt.plot(xp, pxp, '-', label='fitting sigmoid')
+        plt.plot(xp, pxp, '-', label='fitting sigmoid (stderr = %.2f' % sigm_stderr + ')')
     if exp_fitting:
-        plt.plot(exp_xp, exp_pxp, '-', label='fitting exponential')
+        plt.plot(exp_xp, exp_pxp, '-', label='fitting exponential (stderr = %.2f' % exp_stderr + ')')
     if log_fitting:
-        plt.plot(der_xp, der_pxp, '-', label='fitting logistic distribution')
+        plt.plot(der_xp, der_pxp, '-', label='fitting logistic distribution (stderr = %.2f' % log_stderr + ')')
 
     plt.plot(x_orig, y_orig, '.', label=category)
     if sigm_fitting:
