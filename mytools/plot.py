@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.graph_objs as go
 import numpy as np
 import matplotlib.pyplot as plt
+from typing import List
 
 
 def iplot_add_log_scale_button(fig):
@@ -40,29 +41,56 @@ def iplot_comparative_plot(data_frame, title='Comparison of death cases', size=4
                            asFigure=True):
     fig = data_frame.iplot(theme="white", title=title, size=size, yTitle=yTitle, mode=mode, asFigure=asFigure)
 
-    days = data_frame.index
-
-    fig.update_layout(
-        xaxis=dict(
-            tickmode='array',
-            tickvals=days,
-            ticktext=dt.day_of_year_to_string(days),
-            tickangle=90
-        )
-    )
+    # days = data_frame.index
+    #
+    # fig.update_layout(
+    #     xaxis=dict(
+    #         tickmode='array',
+    #         tickvals=days,
+    #         ticktext=dt.day_of_year_to_string(days),
+    #         tickangle=90
+    #     )
+    # )
 
     return iplot_add_log_scale_button(fig)
 
 
-def iplot_analysis_plot(data_frame, title: str, exp_fitting: bool = True, sigm_fitting: bool = True,
+def get_days(data_frame: pd.DataFrame) -> List[int]:
+    day_col = 'day'
+    if day_col in data_frame.columns:
+        if data_frame[day_col].dtype != 'str':
+            return data_frame[day_col].tolist()
+        else:
+            raise TypeError('The day column is not a numeric value')
+
+    dates = data_frame.index.tolist()
+    if not all(isinstance(d, str) for d in dates):
+        raise TypeError('The indexes seems not to be strings containing the dates')
+
+    return dt.str_to_day_of_year(dates, dt.format_ddmmyy)
+
+
+def iplot_analysis_plot(data_frame: pd.DataFrame, title: str, exp_fitting: bool = True, sigm_fitting: bool = True,
                         log_fitting: bool = True):
+    """
+
+    Args:
+        data_frame (pd.DataFrame):  dataframe with 'day' and
+        title ():
+        exp_fitting ():
+        sigm_fitting ():
+        log_fitting ():
+
+    Returns:
+
+    """
     day_col = 'day'
     exp_col = 'exp'
     sigm_col = 'sigm'
     log_col = 'log'
-    cases_col = data_frame.columns[1]
+    cases_col = data_frame.columns[0]
 
-    x_orig = data_frame[day_col]
+    x_orig = np.array(get_days(data_frame))
     y_orig = data_frame[cases_col]
 
     # preparing table with predictions
@@ -70,6 +98,7 @@ def iplot_analysis_plot(data_frame, title: str, exp_fitting: bool = True, sigm_f
     d_min = x_orig.min()
 
     df_final = data_frame
+    df_final[day_col] = x_orig
 
     columns = []
 
