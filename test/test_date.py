@@ -7,7 +7,7 @@ class MyTestCase(unittest.TestCase):
 
     def setUp(self):
         self.year = 2011
-        self.format = '%d/%m/%y'
+        self.format = dt.format_ddmmyy
         self.this_year = int(datetime.datetime.now().year)
         self.date_list = [datetime.datetime(self.year, 1, 1, 0),
                           datetime.datetime(self.year, 2, 1, 0),
@@ -36,6 +36,14 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(dt.str_to_day_of_year(self.str_date_list[1], self.format), self.days_list[1])
         self.assertEqual(dt.str_to_day_of_year(self.str_date_list[2], self.format), self.days_list[2])
         self.assertListEqual(dt.str_to_day_of_year(self.str_date_list, self.format), self.days_list)
+
+    def test_str_convert_mdy_to_dmy(self):
+        input_dates = ['11/28/19', '03/02/20', '02/29/20']
+        expected = ['28/11/19', '02/03/20', '29/02/20']
+        for count, ele in enumerate(input_dates):
+            self.assertEqual(dt.str_convert_mdy_to_dmy(ele), expected[count])
+
+        self.assertListEqual(dt.str_convert_mdy_to_dmy(input_dates), expected)
 
 
 if __name__ == '__main__':
