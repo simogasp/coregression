@@ -126,3 +126,12 @@ def italy_get_list_of_provinces_for_region(region: str) -> List[str]:
     # exclude the non province
     condition = (df_cases[italy_region_name_field] == region) & (df_cases[italy_province_name_field] != italy_not_a_province)
     return df_cases[condition][italy_province_name_field].unique().tolist()
+
+
+def italy_get_list_of_regions() -> List[str]:
+    """
+    Get the list of all italian regions
+    Returns:
+        the list of regions in Italy
+    """
+    return italy_load_regions()[italy_region_name_field].unique().tolist()
