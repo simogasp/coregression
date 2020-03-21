@@ -57,6 +57,12 @@ italy_province_name_field = 'denominazione_provincia'
 italy_not_a_province = 'In fase di definizione/aggiornamento'
 italy_date_field = 'data'
 
+italy_northern_regions = ['P.A. Bolzano', 'Emilia Romagna', 'Friuli Venezia Giulia', 'Liguria', 'Lombardia', 'Piemonte',
+                          'P.A. Trento', "Valle d'Aosta", 'Veneto']
+italy_central_regions = ['Lazio', 'Marche', 'Toscana', 'Umbria']
+italy_southern_regions = ['Abruzzo', 'Campania', 'Basilicata', 'Calabria', 'Molise', 'Puglia']
+italy_islands_regions = ['Sardegna', 'Sicilia']
+
 
 def italy_get_filename_regions() -> str:
     return 'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv'
