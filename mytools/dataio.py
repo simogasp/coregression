@@ -66,6 +66,10 @@ def italy_get_filename_provinces() -> str:
     return 'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province.csv'
 
 
+def italy_get_filename_country() -> str:
+    return 'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale.csv'
+
+
 def italy_load(file_name: str, field: str, search_for: List[str] = None) -> pd.DataFrame:
     df_cases = pd.read_csv(file_name)
 
@@ -79,12 +83,16 @@ def italy_load(file_name: str, field: str, search_for: List[str] = None) -> pd.D
     return df_cases[df_cases[field].isin(search_for)].drop(columns=italy_date_field)
 
 
-def italy_load_provinces(file_name: str, provinces: List[str] = None) -> pd.DataFrame:
-    return italy_load(file_name, italy_province_name_field, provinces)
+def italy_load_provinces(provinces: List[str] = None) -> pd.DataFrame:
+    return italy_load(italy_get_filename_provinces(), italy_province_name_field, provinces)
 
 
-def italy_load_regions(file_name: str, regions: List[str] = None) -> pd.DataFrame:
-    return italy_load(file_name, italy_region_name_field, regions)
+def italy_load_regions(regions: List[str] = None) -> pd.DataFrame:
+    return italy_load(italy_get_filename_regions(), italy_region_name_field, regions)
+
+
+def italy_load_whole_country() -> pd.DataFrame:
+    return italy_load(italy_get_filename_country(), field='', search_for=None)
 
 
 def italy_filter_by_category(data_frame: pd.DataFrame, field: str, category: str) -> pd.DataFrame:
@@ -99,6 +107,10 @@ def italy_filter_by_category(data_frame: pd.DataFrame, field: str, category: str
         data[reg] = filtered[filtered[field] == reg][category].tolist()
 
     return pd.DataFrame(data, index=days)
+
+
+def italy_country_filter_by_category(data_frame: pd.DataFrame, categories: List[str]) -> pd.DataFrame:
+    return pd.DataFrame(data_frame[categories])
 
 
 def italy_regions_filter_by_category(data_frame: pd.DataFrame, category: str) -> pd.DataFrame:
