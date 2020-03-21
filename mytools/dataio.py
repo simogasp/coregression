@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 import pandas as pd
 import mytools.date as dt
 
@@ -54,6 +54,7 @@ def load_cases(file_name: str, countries: List[str] = None) -> pd.DataFrame:
 
 italy_region_name_field = 'denominazione_regione'
 italy_province_name_field = 'denominazione_provincia'
+italy_not_a_province = 'In fase di definizione/aggiornamento'
 italy_date_field = 'data'
 
 
@@ -106,3 +107,10 @@ def italy_regions_filter_by_category(data_frame: pd.DataFrame, category: str) ->
 
 def italy_provinces_filter_by_category(data_frame: pd.DataFrame, category: str) -> pd.DataFrame:
     return italy_filter_by_category(data_frame, field=italy_province_name_field, category=category)
+
+
+def italy_get_list_of_provinces_for_region(region: str) -> List[str]:
+    df_cases = pd.read_csv(italy_get_filename_provinces())
+    # exclude the non province
+    condition = (df_cases[italy_region_name_field] == region) & (df_cases[italy_province_name_field] != italy_not_a_province)
+    return df_cases[condition][italy_province_name_field].unique().tolist()
