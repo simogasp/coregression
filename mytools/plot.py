@@ -216,3 +216,21 @@ def matplot_analysis_plot(x_orig, y_orig, title: str, category: str, exp_fitting
     plt.legend(loc='upper left')
     # plt.yscale('log')
     plt.show()
+
+
+def matplot_comparative_plot(data_frame: pd.DataFrame, title:str):
+
+    x_orig = np.array(get_days(data_frame))
+    for reg in data_frame.columns.tolist():
+        plt.plot(x_orig, data_frame[reg], '.-', label=reg)
+
+    locs, labels = plt.xticks()
+    a = list((dt.day_of_year_to_date(v)).strftime("%d %b") for v in locs.tolist())
+    plt.xticks(ticks=locs.tolist(), labels=a)
+
+    plt.ylabel('cases', rotation='vertical')
+    plt.grid(True)
+    plt.title(title)
+    plt.legend(loc='upper left')
+    # plt.yscale('log')
+    plt.show()
