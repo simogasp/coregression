@@ -2,6 +2,10 @@ from typing import List, Union
 import pandas as pd
 import mytools.date as dt
 
+world_country_name_field = 'Country/Region'
+world_province_name_field = 'Province/State'
+world_first_date = '1/22/20'
+
 
 def get_filename_confirmed_cases() -> str:
     return 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data' \
@@ -18,12 +22,12 @@ def get_filename_recovered_cases() -> str:
            '/csse_covid_19_time_series/time_series_19-covid-Recovered.csv'
 
 
-def load_cases(file_name: str, countries: List[str] = None) -> pd.DataFrame:
+def world_load_cases(file_name: str, countries: List[str] = None) -> pd.DataFrame:
     df_cases = pd.read_csv(file_name)
 
-    first_date = '1/22/20'
-    country_col = 'Country/Region'
-    province_col = 'Province/State'
+    first_date = world_first_date
+    country_col = world_country_name_field
+    province_col = world_province_name_field
 
     if countries is None:
         cases_countries = df_cases.loc[:, first_date:].transpose(copy=True)
@@ -48,6 +52,18 @@ def load_cases(file_name: str, countries: List[str] = None) -> pd.DataFrame:
     cases_countries.index = dates
 
     return cases_countries
+
+
+def world_load_stats_country(country: str) -> pd.DataFrame:
+
+    confirmed_cases = world_load_cases(get_filename_confirmed_cases(), [country])
+    death_cases = world_load_cases(get_filename_death_cases(), [country])
+    recovered_cases = world_load_cases(get_filename_recovered_cases(), [country])
+
+    overall_stats = pd.concat([confirmed_cases, death_cases, recovered_cases], axis=1, sort=False)
+    overall_stats.columns = ['confirmed', 'deaths', 'recovered']
+
+    return overall_stats
 
 
 # ITALY
