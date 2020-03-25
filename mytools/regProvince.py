@@ -24,4 +24,4 @@ if __name__ == "__main__":
 
     intensive = io.italy_provinces_filter_by_category(provinces, category)
 
-    mpl.matplot_comparative_plot(intensive, title='Veneto by provinces')
+    mpl.matplot_comparative_plot(intensive, title='Veneto ' + category + ' by provinces')
