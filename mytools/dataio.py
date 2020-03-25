@@ -73,6 +73,17 @@ italy_province_name_field = 'denominazione_provincia'
 italy_not_a_province = 'In fase di definizione/aggiornamento'
 italy_date_field = 'data'
 
+italy_intensive_care_field = 'terapia_intensiva'
+italy_deaths_field = 'deceduti'
+italy_total_cases_field = 'totale_casi'
+italy_tests_field = 'tamponi'
+italy_current_positives_field = 'totale_attualmente_positivi'
+italy_new_positives_field = 'nuovi_attualmente_positivi'
+italy_isolation_field = 'isolamento_domiciliare'
+italy_discharged_field = 'dimessi_guariti'
+italy_hospitalized_field = 'totale_ospedalizzati'
+italy_hospitalized_with_symptoms_field = 'ricoverati_con_sintomi'
+
 italy_northern_regions = ['P.A. Bolzano', 'Emilia Romagna', 'Friuli Venezia Giulia', 'Liguria', 'Lombardia', 'Piemonte',
                           'P.A. Trento', "Valle d'Aosta", 'Veneto']
 italy_central_regions = ['Lazio', 'Marche', 'Toscana', 'Umbria']
