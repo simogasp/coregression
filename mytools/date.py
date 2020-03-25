@@ -2,7 +2,7 @@ import datetime
 from typing import Union, List, Iterable as typeIterable
 from collections.abc import Iterable
 
-format_ISO8601 = '%Y-%m-%d %H:%M:%S'
+format_ISO8601 = '%Y-%m-%dT%H:%M:%S'
 format_mmddyy = '%m/%d/%y'
 format_ddmmyy = '%d/%m/%y'
 format_mmmdd = '%d %b'
