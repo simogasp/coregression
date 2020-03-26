@@ -32,6 +32,14 @@ if __name__ == "__main__":
     regions = io.italy_load_regions()
     total_cases = io.italy_regions_filter_by_category(regions, category)
 
-    mpl.matplot_comparative_plot(total_cases, title='Italy by regions')
+    mpl.matplot_comparative_plot(total_cases, title='Italy ' + category + ' by regions')
 
+    mpl.matplot_comparative_plot(total_cases, title='Italy ' + category + ' by regions', min_common=20)
+
+    category = 'deceduti'
+    deaths = io.italy_regions_filter_by_category(regions, category)
+
+    mpl.matplot_comparative_plot(deaths, title='Italy ' + category + ' by regions')
+
+    mpl.matplot_comparative_plot(deaths, title='Italy ' + category + ' by regions', min_common=20)
 
