@@ -9,17 +9,17 @@ world_first_date = '1/22/20'
 
 def get_filename_confirmed_cases() -> str:
     return 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data' \
-           '/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv'
+           '/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
 
 
 def get_filename_death_cases() -> str:
     return 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data' \
-           '/csse_covid_19_time_series/time_series_19-covid-Deaths.csv'
+           '/csse_covid_19_time_series/time_series_covid19_deaths_global.csv'
 
 
 def get_filename_recovered_cases() -> str:
     return 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data' \
-           '/csse_covid_19_time_series/time_series_19-covid-Recovered.csv'
+           '/csse_covid_19_time_series/time_series_covid19_recovered_global.csv'
 
 
 def world_load_cases(file_name: str, countries: List[str] = None) -> pd.DataFrame:
