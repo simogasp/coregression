@@ -37,6 +37,21 @@ def iplot_add_log_scale_button(fig):
     return fig
 
 
+def iplot_sync_plot(data_frame, title: str, min_value: int, size=4, yTitle='cases', mode='lines+markers', asFigure=True):
+
+    d = {}
+    for col in data_frame.columns:
+        condition = data_frame[col] >= min_value
+        d[col] = data_frame[col][condition].to_list()
+
+    new_data = pd.DataFrame(dict([(k, pd.Series(v)) for k, v in d.items()]))
+    x_title = 'days since the ' + str(min_value) + 'th case'
+    fig = new_data.iplot(theme="white", title=title, size=size, yTitle=yTitle, xTitle=x_title, mode=mode, asFigure=asFigure)
+
+
+    return iplot_add_log_scale_button(fig)
+
+
 def iplot_comparative_plot(data_frame, title='Comparison of death cases', size=4, yTitle='cases', mode='lines+markers',
                            asFigure=True):
     fig = data_frame.iplot(theme="white", title=title, size=size, yTitle=yTitle, mode=mode, asFigure=asFigure)
@@ -218,19 +233,28 @@ def matplot_analysis_plot(x_orig, y_orig, title: str, category: str, exp_fitting
     plt.show()
 
 
-def matplot_comparative_plot(data_frame: pd.DataFrame, title:str):
+def matplot_comparative_plot(data_frame: pd.DataFrame, title: str, min_common: int = None):
 
     x_orig = np.array(get_days(data_frame))
-    for reg in data_frame.columns.tolist():
-        plt.plot(x_orig, data_frame[reg], '.-', label=reg)
+    if min_common:
+        for reg in data_frame.columns.tolist():
+            condition = data_frame[reg] >= min_common
+            plt.plot(data_frame[reg][condition].tolist(), '.-', label=reg)
+        plt.xlabel('days since the ' + str(min_common) + 'th')
+        plt.yscale('log')
+    else:
+        for reg in data_frame.columns.tolist():
+            plt.plot(x_orig, data_frame[reg], '.-', label=reg)
 
-    locs, labels = plt.xticks()
-    a = list((dt.day_of_year_to_date(v)).strftime("%d %b") for v in locs.tolist())
-    plt.xticks(ticks=locs.tolist(), labels=a)
+        locs, labels = plt.xticks()
+        a = list((dt.day_of_year_to_date(v)).strftime("%d %b") for v in locs.tolist())
+        plt.xticks(ticks=locs.tolist(), labels=a)
 
     plt.ylabel('cases', rotation='vertical')
     plt.grid(True)
     plt.title(title)
-    plt.legend(loc='upper left')
+    # plt.legend(loc='upper left')
+    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+           ncol=4, mode="expand", borderaxespad=0.)
     # plt.yscale('log')
     plt.show()
