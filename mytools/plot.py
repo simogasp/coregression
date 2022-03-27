@@ -37,8 +37,8 @@ def iplot_add_log_scale_button(fig):
     return fig
 
 
-def iplot_sync_plot(data_frame, title: str, min_value: int, size=4, yTitle='cases', mode='lines+markers', asFigure=True):
-
+def iplot_sync_plot(data_frame, title: str, min_value: int, size=4, yTitle='cases', mode='lines+markers',
+                    asFigure=True):
     d = {}
     for col in data_frame.columns:
         condition = data_frame[col] >= min_value
@@ -46,8 +46,8 @@ def iplot_sync_plot(data_frame, title: str, min_value: int, size=4, yTitle='case
 
     new_data = pd.DataFrame(dict([(k, pd.Series(v)) for k, v in d.items()]))
     x_title = 'days since the ' + str(min_value) + 'th case'
-    fig = new_data.iplot(theme="white", title=title, size=size, yTitle=yTitle, xTitle=x_title, mode=mode, asFigure=asFigure)
-
+    fig = new_data.iplot(theme="white", title=title, size=size, yTitle=yTitle, xTitle=x_title, mode=mode,
+                         asFigure=asFigure)
 
     return iplot_add_log_scale_button(fig)
 
@@ -175,8 +175,8 @@ def iplot_analysis_plot(data_frame: pd.DataFrame, title: str, exp_fitting: bool 
     return fig
 
 
-def matplot_analysis_plot(x_orig, y_orig, title: str, category: str, exp_fitting: bool = True, sigm_fitting: bool = True, log_fitting: bool = True, verbose: bool = True):
-
+def matplot_analysis_plot(x_orig, y_orig, title: str, category: str, exp_fitting: bool = True,
+                          sigm_fitting: bool = True, log_fitting: bool = True, verbose: bool = True):
     if exp_fitting:
         exp_model, exp_xp, exp_pxp = reg.fit_exponential(x_orig, y_orig, verbose=True, upper=1.25)
         exp_res = reg.exponential_residuals(p=exp_model, x=x_orig, y=y_orig)
@@ -203,8 +203,6 @@ def matplot_analysis_plot(x_orig, y_orig, title: str, category: str, exp_fitting
             print(log_res)
             print('std err der sigm: ' + str(log_stderr))
 
-
-
     # Plot the results
     if sigm_fitting:
         plt.plot(xp, pxp, '-', label='fitting sigmoid (stderr = %.2f' % sigm_stderr + ')')
@@ -219,7 +217,9 @@ def matplot_analysis_plot(x_orig, y_orig, title: str, category: str, exp_fitting
                  label='Inflection point (' + dt.day_of_year_to_date(flex[0]).strftime("%d %b") + ' ' + '{:.2f}'.format(
                      flex[1]) + ' cases)')
     if log_fitting:
-        plt.plot(peak[0], peak[1], '.', label='peak (' + dt.day_of_year_to_date(peak[0]).strftime("%d %b") + ' ' + '{:.2f}'.format( peak[1]) + ' cases)')
+        plt.plot(peak[0], peak[1], '.',
+                 label='peak (' + dt.day_of_year_to_date(peak[0]).strftime("%d %b") + ' ' + '{:.2f}'.format(
+                     peak[1]) + ' cases)')
 
     locs, labels = plt.xticks()
     a = list((dt.day_of_year_to_date(v)).strftime("%d %b") for v in locs.tolist())
@@ -234,7 +234,6 @@ def matplot_analysis_plot(x_orig, y_orig, title: str, category: str, exp_fitting
 
 
 def matplot_comparative_plot(data_frame: pd.DataFrame, title: str, min_common: int = None):
-
     x_orig = np.array(get_days(data_frame))
     if min_common:
         for reg in data_frame.columns.tolist():
@@ -255,6 +254,6 @@ def matplot_comparative_plot(data_frame: pd.DataFrame, title: str, min_common: i
     plt.title(title)
     # plt.legend(loc='upper left')
     plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-           ncol=4, mode="expand", borderaxespad=0.)
+               ncol=4, mode="expand", borderaxespad=0.)
     # plt.yscale('log')
     plt.show()
